@@ -1,8 +1,9 @@
 package com.example.user_info.controller;
 
+import com.example.user_info.api_response.ApiResponse;
 import com.example.user_info.dto.UserRequestDto;
 import com.example.user_info.model.User;
-import com.example.user_info.request_dto.UserResponseDto;
+import com.example.user_info.dto.UserResponseDto;
 import com.example.user_info.sevice.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,10 @@ public class UserController {
     }
 
     @GetMapping("/all_user")
-    public ResponseEntity<List<User>> getAllUser() {
-        List<User> user = userService.getUser();
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<ApiResponse<List<UserResponseDto>>>getAllUser() {
+        List<UserResponseDto> user = userService.getUser();
+        return  ResponseEntity.ok(ApiResponse.
+                success("Users fetched successfully",user));
     }
 
     @PostMapping

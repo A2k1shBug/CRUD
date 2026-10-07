@@ -1,4 +1,4 @@
-package com.example.user_info.request_dto;
+package com.example.user_info.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

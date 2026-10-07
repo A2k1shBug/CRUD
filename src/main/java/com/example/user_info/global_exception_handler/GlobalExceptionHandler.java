@@ -1,5 +1,6 @@
 package com.example.user_info.global_exception_handler;
 
+import com.example.user_info.api_response.ApiResponse;
 import com.example.user_info.exception.UserNotExist;
 import com.example.user_info.exception.UserNotSaveException;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotSaveException.class)
-    public ResponseEntity<ErrorResponse> handleSaveDb(UserNotSaveException e, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Void>>handleSaveDb(UserNotSaveException e, HttpServletRequest request) {
         log.error("Fail to user save", e);
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -27,11 +28,13 @@ public class GlobalExceptionHandler {
                 e.getMessage(),
                 request.getRequestURI()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.failure(e.getMessage(), errorResponse));
     }
 
     @ExceptionHandler(UserNotExist.class)
-    public ResponseEntity<ErrorResponse> deleteUser(UserNotSaveException e, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Void>> deleteUser(UserNotSaveException e, HttpServletRequest request) {
         log.error("Fail to delete user", e);
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -39,7 +42,9 @@ public class GlobalExceptionHandler {
                 e.getMessage(),
                 request.getRequestURI()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.failure(e.getMessage(), errorResponse));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -6,7 +6,7 @@ import com.example.user_info.exception.UserNotExist;
 import com.example.user_info.exception.UserNotSaveException;
 import com.example.user_info.model.User;
 import com.example.user_info.repo.UserRepository;
-import com.example.user_info.request_dto.UserResponseDto;
+import com.example.user_info.dto.UserResponseDto;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -23,8 +24,11 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
-    public List<User> getUser() {
-        return userRepo.findAll();
+    public List<UserResponseDto> getUser() {
+        return userRepo.findAll()
+                .stream()
+                .map(user -> toResponse(user))
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -41,6 +45,7 @@ public class UserService {
         user.setDateTime(LocalDateTime.now(ZoneId.of("Asia/Kathmandu")));
 
         try {
+            user=null;
             return toResponse(userRepo.save(user));
         } catch (DataAccessException e) {
             throw new UserNotSaveException("Fail to save user", e);
