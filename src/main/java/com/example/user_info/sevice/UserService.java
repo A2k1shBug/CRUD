@@ -45,7 +45,6 @@ public class UserService {
         user.setDateTime(LocalDateTime.now(ZoneId.of("Asia/Kathmandu")));
 
         try {
-            user=null;
             return toResponse(userRepo.save(user));
         } catch (DataAccessException e) {
             throw new UserNotSaveException("Fail to save user", e);

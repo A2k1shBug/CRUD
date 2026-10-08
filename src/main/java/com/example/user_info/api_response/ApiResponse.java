@@ -2,7 +2,9 @@ package com.example.user_info.api_response;
 
 import com.example.user_info.global_exception_handler.ErrorResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Getter;
 
+@Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
 
@@ -24,15 +26,4 @@ public class ApiResponse<T> {
         return new ApiResponse<>(message, null, error);
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public ErrorResponse getError() {
-        return error;
-    }
 }

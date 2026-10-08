@@ -2,7 +2,6 @@ package com.example.user_info.controller;
 
 import com.example.user_info.api_response.ApiResponse;
 import com.example.user_info.dto.UserRequestDto;
-import com.example.user_info.model.User;
 import com.example.user_info.dto.UserResponseDto;
 import com.example.user_info.sevice.UserService;
 import org.springframework.http.HttpStatus;
@@ -23,29 +22,33 @@ public class UserController {
     }
 
     @GetMapping("/all_user")
-    public ResponseEntity<ApiResponse<List<UserResponseDto>>>getAllUser() {
+    public ResponseEntity<ApiResponse<List<UserResponseDto>>> getAllUser() {
         List<UserResponseDto> user = userService.getUser();
-        return  ResponseEntity.ok(ApiResponse.
-                success("Users fetched successfully",user));
+        return ResponseEntity.ok(ApiResponse.
+                success("Users fetched successfully", user));
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(@Valid  @RequestBody UserRequestDto user) {
+    public ResponseEntity<ApiResponse<UserResponseDto>> createUser(
+            @Valid @RequestBody UserRequestDto user) {
         UserResponseDto responseUser = userService.saveUser(user);
-        return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.success("User created successfully", responseUser));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.dropUser(id);
-        String message = "User deleted Successfully";
-        return new ResponseEntity<>(message, HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id,
-                                           @RequestBody UserRequestDto request) {
+    public ResponseEntity<ApiResponse<UserResponseDto>> updateUser(@PathVariable Long id,
+                                                                   @RequestBody UserRequestDto request) {
         UserResponseDto updateResponseUser = userService.updateUser(id, request);
-        return new ResponseEntity<>(updateResponseUser, HttpStatus.OK);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success("User updated successfully", updateResponseUser));
     }
 }

@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,6 +22,6 @@ public class ErrorResponse {
         this.error = error;
         this.message = message;
         this.path = path;
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = LocalDateTime.now(ZoneId.of("Asia/Kathmandu"));
     }
 }
