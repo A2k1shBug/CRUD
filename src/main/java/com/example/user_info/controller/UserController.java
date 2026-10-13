@@ -28,7 +28,7 @@ public class UserController {
                 success("Users fetched successfully", user));
     }
 
-    @PostMapping
+    @PostMapping("/create-newUser")
     public ResponseEntity<ApiResponse<UserResponseDto>> createUser(
             @Valid @RequestBody UserRequestDto user) {
         UserResponseDto responseUser = userService.saveUser(user);

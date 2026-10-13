@@ -58,7 +58,6 @@ public class UserService {
         dto.setEmail(user.getEmail());
         dto.setPhone(user.getPhoneNumber());
         dto.setCreatedAt(user.getDateTime());
-        dto.setPassword(user.getPassword());
         return dto;
     }
 
