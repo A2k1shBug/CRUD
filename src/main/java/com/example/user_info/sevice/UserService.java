@@ -36,10 +36,10 @@ public class UserService {
         if (userRepo.existsByEmail(request.getEmail())) {
             throw new UserAlreadyExistsException("Email already registered");
         }
-
+        String email = request.getEmail().trim().toLowerCase();
         User user = new User();
         user.setName(request.getName());
-        user.setEmail(request.getEmail());
+        user.setEmail(email);
         user.setPhoneNumber(request.getPhone());
         user.setPassword(request.getPassword());
         user.setDateTime(LocalDateTime.now(ZoneId.of("Asia/Kathmandu")));
@@ -69,6 +69,7 @@ public class UserService {
         userRepo.deleteById(id);
     }
 
+
     @Transactional
     public UserResponseDto updateUser(Long id, UserRequestDto request) {
         User user = userRepo.findById(id)
@@ -76,6 +77,9 @@ public class UserService {
 
         if (request.getName() != null && !request.getName().isBlank()) {
             user.setName(request.getName());
+
+        }else{
+            user.setName(user.getName());
         }
         if (request.getPassword() != null && !request.getPassword().isBlank()) {
             user.setPassword(request.getPassword());
