@@ -1,5 +1,6 @@
 package com.example.post_info.controller;
 
+import com.example.api_response.ApiResponse;
 import com.example.post_info.dto.PostRequest;
 import com.example.post_info.dto.PostResponse;
 import com.example.post_info.service.PostService;
@@ -20,15 +21,18 @@ public class PostController {
     }
 
     @GetMapping("/get-allPosts")
-    public ResponseEntity<List<PostResponse>> getAllPost() {
+    public ResponseEntity<ApiResponse<List<PostResponse>>> getAllPost() {
         List<PostResponse> post = postService.getPost();
-        return new ResponseEntity<>(post, HttpStatus.OK);
+        return ResponseEntity.ok(ApiResponse.
+                success("Users fetched successfully", post));
     }
 
     @PostMapping("/create-post")
-    public ResponseEntity<PostResponse> createPost(@Valid @RequestBody PostRequest request) {
+    public ResponseEntity<ApiResponse<PostResponse>> createPost(@Valid @RequestBody PostRequest request) {
         PostResponse newPostResponse = postService.createNewPost(request);
-        return new ResponseEntity<>(newPostResponse, HttpStatus.CREATED);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.success("User created successfully", newPostResponse));
     }
 
     @DeleteMapping("/delete/{id}")
@@ -38,8 +42,11 @@ public class PostController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<PostResponse> updatePost(@PathVariable Long id, @RequestBody PostRequest postRequest) {
-        PostResponse postResponse = postService.updateUser(id, postRequest);
-        return new ResponseEntity<>(postResponse,HttpStatus.OK);
+    public ResponseEntity<ApiResponse<PostResponse>>updatePost(@PathVariable Long id,
+                                                               @Valid @RequestBody PostRequest postRequest) {
+        PostResponse updateResponse = postService.updateUser(id, postRequest);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success("User updated successfully", updateResponse));
     }
 }

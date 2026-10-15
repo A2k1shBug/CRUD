@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandlerPost {
     @ExceptionHandler(PostNotSave.class)
     public ResponseEntity<ApiResponse<Void>> handleSaveDb(PostNotSave e, HttpServletRequest request) {
         log.error("Fail to user save", e);
@@ -35,14 +35,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PostNotExist.class)
     public ResponseEntity<ApiResponse<Void>> deleteUser(PostNotExist e, HttpServletRequest request) {
         log.error("Fail to delete user", e);
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+                status.value(),
+                status.getReasonPhrase(),
                 e.getMessage(),
                 request.getRequestURI()
         );
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(status)
                 .body(ApiResponse.failure(e.getMessage(), errorResponse));
     }
 }
