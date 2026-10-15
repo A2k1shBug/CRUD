@@ -1,4 +1,4 @@
-package com.example.user_info.global_exception_handler;
+package com.example.response_error;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

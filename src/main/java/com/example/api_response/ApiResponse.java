@@ -1,6 +1,6 @@
-package com.example.user_info.api_response;
+package com.example.api_response;
 
-import com.example.user_info.global_exception_handler.ErrorResponse;
+import com.example.response_error.ErrorResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 

@@ -1,6 +1,6 @@
 package com.example.user_info.controller;
 
-import com.example.user_info.api_response.ApiResponse;
+import com.example.api_response.ApiResponse;
 import com.example.user_info.dto.UserRequestDto;
 import com.example.user_info.dto.UserResponseDto;
 import com.example.user_info.sevice.UserService;
