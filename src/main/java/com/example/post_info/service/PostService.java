@@ -42,7 +42,7 @@ public class PostService {
         postResponse.setPostName(post.getPostName());
         postResponse.setContent(post.getPostContent());
         postResponse.setCreated(post.getDateTime());
-        postResponse.setUserId(post.getUser().getId());
+        postResponse.setUserId(post.getUser() != null ? post.getUser().getId() : null);
         return postResponse;
     }
 

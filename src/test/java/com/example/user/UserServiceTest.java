@@ -19,6 +19,7 @@ import org.springframework.dao.DataAccessResourceFailureException;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,9 +102,11 @@ class UserServiceTest {
     @Test
     void getUser_returnsAllUsersAsResponseDtos() {
         User user1 = new User
-                (1L, "Ramu", "ramu@gmail.com", "ramu12345", "9766819737", LocalDateTime.now());
+                (1L, "Ramu", "ramu@gmail.com", "ramu12345", "9766819737",
+                        LocalDateTime.now(),new ArrayList<>() );
         User user2 = new User
-                (2L, "Shyam", "ram@gmail.com", "9800000000", "hashedPwd2", LocalDateTime.now());
+                (2L, "Shyam", "ram@gmail.com", "9800000000", "hashedPwd2",
+                        LocalDateTime.now(),new ArrayList<>() );
         when(repo.findAll()).thenReturn(List.of(user1, user2));
         List<UserResponseDto> user = userService.getUser();
         assertEquals(2, user.size());

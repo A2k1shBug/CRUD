@@ -5,6 +5,7 @@ import com.example.post_info.model.Post;
 import com.example.post_info.repo.PostRepo;
 import com.example.post_info.service.PostService;
 
+import com.example.user_info.model.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,17 +29,22 @@ class PostServiceTest {
 
     @Test
     void getPost_whenPostsExist_returnsMappedResponses() {
+        User user = new User();
+        user.setId(1L);
+        user.setName("Ramu");
 
         // ARRANGE: duita alag Post object banaune (har setter sahi variable ma)
         Post post1 = new Post();
         post1.setId(1L);
         post1.setPostName("Exciting Day");
         post1.setPostContent("Today was a wonderful day!");
+        post1.setUser(user);
 
         Post post2 = new Post();
         post2.setId(2L);
         post2.setPostName("Planning Avoiding");
         post2.setPostContent("I had a terrible day today.");
+        post1.setUser(user);
 
         // repository.findAll() call bhayo bhane yehi list return gara
         when(postRepo.findAll()).thenReturn(List.of(post1, post2));

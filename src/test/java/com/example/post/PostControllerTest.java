@@ -97,7 +97,7 @@ class PostControllerTest {
         when(postService.createNewPost( any(PostRequest.class),anyLong())).thenReturn(savedResponse);
 
         // ACT: JSON body sahit POST request pathaune
-        mockMvc.perform(post("/post/create-post")
+        mockMvc.perform(post("/post/user/1/create-post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
 
@@ -114,7 +114,7 @@ class PostControllerTest {
     void createPost_blankName_returns400AndDoesNotCallService() throws Exception {
         PostRequest request = new PostRequest("", "Today was a wonderful day!");
 
-        mockMvc.perform(post("/post/create-post")
+        mockMvc.perform(post("/post/user/1/create-post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
