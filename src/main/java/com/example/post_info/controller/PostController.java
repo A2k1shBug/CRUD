@@ -27,9 +27,10 @@ public class PostController {
                 success("Users fetched successfully", post));
     }
 
-    @PostMapping("/create-post")
-    public ResponseEntity<ApiResponse<PostResponse>> createPost(@Valid @RequestBody PostRequest request) {
-        PostResponse newPostResponse = postService.createNewPost(request);
+    @PostMapping("/user/{userId}/create-post")
+    public ResponseEntity<ApiResponse<PostResponse>> createPost(@Valid @RequestBody PostRequest request,
+                                                                @PathVariable Long userId) {
+        PostResponse newPostResponse = postService.createNewPost(request,userId);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success("User created successfully", newPostResponse));
@@ -42,8 +43,8 @@ public class PostController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse<PostResponse>>updatePost(@PathVariable Long id,
-                                                               @Valid @RequestBody PostRequest postRequest) {
+    public ResponseEntity<ApiResponse<PostResponse>> updatePost(@PathVariable Long id,
+                                                                @Valid @RequestBody PostRequest postRequest) {
         PostResponse updateResponse = postService.updateUser(id, postRequest);
         return ResponseEntity
                 .status(HttpStatus.OK)

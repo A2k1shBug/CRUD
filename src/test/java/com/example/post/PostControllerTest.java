@@ -44,9 +44,9 @@ class PostControllerTest {
         // ARRANGE: service le return garne fake data
         List<PostResponse> responses = List.of(
                 new PostResponse(1L, "Exciting Day",
-                        "Today was a wonderful day!", LocalDateTime.now(ZoneId.of("Asia/Kathmandu"))),
+                        "Today was a wonderful day!", LocalDateTime.now(ZoneId.of("Asia/Kathmandu")),1L),
                 new PostResponse(2L, "Planning Avoiding",
-                        "I had a terrible day today.",LocalDateTime.now(ZoneId.of("Asia/Kathmandu")))
+                        "I had a terrible day today.",LocalDateTime.now(ZoneId.of("Asia/Kathmandu")),2L)
         );
         when(postService.getPost()).thenReturn(responses);
 
@@ -91,10 +91,10 @@ class PostControllerTest {
         // ARRANGE: request body ra service le return garne fake response
         PostRequest request = new PostRequest("Exciting Day", "Today was a wonderful day!");
         PostResponse savedResponse = new PostResponse(1L, "Exciting Day",
-                "Today was a wonderful day!",LocalDateTime.now(ZoneId.of("Asia/Kathmandu")));
+                "Today was a wonderful day!",LocalDateTime.now(ZoneId.of("Asia/Kathmandu")),1L);
 
         // service.createNewPost(...) call bhayo bhane savedResponse return gara
-        when(postService.createNewPost(any(PostRequest.class))).thenReturn(savedResponse);
+        when(postService.createNewPost( any(PostRequest.class),anyLong())).thenReturn(savedResponse);
 
         // ACT: JSON body sahit POST request pathaune
         mockMvc.perform(post("/post/create-post")
@@ -107,7 +107,7 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.data.postName").value("Exciting Day"))
                 .andExpect(jsonPath("$.data.content").value("Today was a wonderful day!"));
 
-        verify(postService).createNewPost(any(PostRequest.class));
+        verify(postService).createNewPost( any(PostRequest.class),anyLong());
     }
 
     @Test
@@ -170,7 +170,7 @@ class PostControllerTest {
         //  update garne data ra service le return garne response
         PostRequest request = new PostRequest("Updated Day Title", "Updated content of the post");
         PostResponse updated = new PostResponse(1L, "Updated Day Title",
-                "Updated content of the post",LocalDateTime.now(ZoneId.of("Asia/Kathmandu")));
+                "Updated content of the post",LocalDateTime.now(ZoneId.of("Asia/Kathmandu")),1L);
 
         // eq(1L) = id exactly 1 hunu parcha. Mockito ma ek argument matcher use gare
         // sabai argument matcher nai hunu parcha, tesaile id ma pani eq() halyeko.
