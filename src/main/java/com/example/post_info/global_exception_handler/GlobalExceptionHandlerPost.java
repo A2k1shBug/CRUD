@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class GlobalExceptionHandlerPost {
     @ExceptionHandler(PostNotSave.class)
     public ResponseEntity<ApiResponse<Void>> handleSaveDb(PostNotSave e, HttpServletRequest request) {
-        log.error("Fail to user save", e);
+        log.error("Fail to post save", e);
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
@@ -34,7 +34,7 @@ public class GlobalExceptionHandlerPost {
 
     @ExceptionHandler(PostNotExist.class)
     public ResponseEntity<ApiResponse<Void>> deleteUser(PostNotExist e, HttpServletRequest request) {
-        log.error("Fail to delete user", e);
+        log.error("Fail to delete post", e);
         HttpStatus status = HttpStatus.NOT_FOUND;
 
         ErrorResponse errorResponse = new ErrorResponse(

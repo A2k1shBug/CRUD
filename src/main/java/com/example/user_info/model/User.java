@@ -1,11 +1,14 @@
 package com.example.user_info.model;
 
+import com.example.post_info.model.Post;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -33,5 +36,7 @@ public class User {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateTime;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts = new ArrayList<>();
 
 }

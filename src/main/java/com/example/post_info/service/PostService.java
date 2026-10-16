@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +36,7 @@ public class PostService {
         postResponse.setId(post.getId());
         postResponse.setPostName(post.getPostName());
         postResponse.setContent(post.getPostContent());
+        postResponse.setCreated(post.getDateTime());
         return postResponse;
     }
 
@@ -43,6 +46,7 @@ public class PostService {
         Post post = new Post();
         post.setPostName(request.getPostName());
         post.setPostContent(request.getPostContent());
+        post.setDateTime(LocalDateTime.now(ZoneId.of("Asia/Kathmandu")));
         try {
             savedPost = postRepo.save(post);
         } catch (DataAccessException e) {
@@ -69,7 +73,6 @@ public class PostService {
         if (postRequest.getPostContent() != null && !postRequest.getPostContent().isBlank()) {
             post.setPostContent(postRequest.getPostContent());
         }
-
         try {
             return postResponse(postRepo.saveAndFlush(post));
         } catch (DataAccessException e) {

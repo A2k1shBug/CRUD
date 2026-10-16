@@ -14,6 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,8 +43,10 @@ class PostControllerTest {
 
         // ARRANGE: service le return garne fake data
         List<PostResponse> responses = List.of(
-                new PostResponse(1L, "Exciting Day", "Today was a wonderful day!"),
-                new PostResponse(2L, "Planning Avoiding", "I had a terrible day today.")
+                new PostResponse(1L, "Exciting Day",
+                        "Today was a wonderful day!", LocalDateTime.now(ZoneId.of("Asia/Kathmandu"))),
+                new PostResponse(2L, "Planning Avoiding",
+                        "I had a terrible day today.",LocalDateTime.now(ZoneId.of("Asia/Kathmandu")))
         );
         when(postService.getPost()).thenReturn(responses);
 
@@ -86,7 +90,8 @@ class PostControllerTest {
 
         // ARRANGE: request body ra service le return garne fake response
         PostRequest request = new PostRequest("Exciting Day", "Today was a wonderful day!");
-        PostResponse savedResponse = new PostResponse(1L, "Exciting Day", "Today was a wonderful day!");
+        PostResponse savedResponse = new PostResponse(1L, "Exciting Day",
+                "Today was a wonderful day!",LocalDateTime.now(ZoneId.of("Asia/Kathmandu")));
 
         // service.createNewPost(...) call bhayo bhane savedResponse return gara
         when(postService.createNewPost(any(PostRequest.class))).thenReturn(savedResponse);
@@ -164,7 +169,8 @@ class PostControllerTest {
 
         //  update garne data ra service le return garne response
         PostRequest request = new PostRequest("Updated Day Title", "Updated content of the post");
-        PostResponse updated = new PostResponse(1L, "Updated Day Title", "Updated content of the post");
+        PostResponse updated = new PostResponse(1L, "Updated Day Title",
+                "Updated content of the post",LocalDateTime.now(ZoneId.of("Asia/Kathmandu")));
 
         // eq(1L) = id exactly 1 hunu parcha. Mockito ma ek argument matcher use gare
         // sabai argument matcher nai hunu parcha, tesaile id ma pani eq() halyeko.
