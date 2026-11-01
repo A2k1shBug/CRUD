@@ -2,7 +2,7 @@ package com.example.user_info.global_exception_handler;
 
 import com.example.api_response.ApiResponse;
 import com.example.response_error.ErrorResponse;
-import com.example.user_info.exception.UserNotExist;
+import com.example.user_info.exception.UserNotExistException;
 import com.example.user_info.exception.UserNotSaveException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -34,8 +34,8 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.failure(e.getMessage(), errorResponse));
     }
 
-    @ExceptionHandler(UserNotExist.class)
-    public ResponseEntity<ApiResponse<Void>> deleteUser(UserNotExist e, HttpServletRequest request) {
+    @ExceptionHandler(UserNotExistException.class)
+    public ResponseEntity<ApiResponse<Void>> deleteUser(UserNotExistException e, HttpServletRequest request) {
         log.error("Fail to delete user", e);
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),

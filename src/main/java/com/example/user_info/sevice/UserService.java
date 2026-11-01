@@ -2,10 +2,10 @@ package com.example.user_info.sevice;
 
 import com.example.user_info.dto.UserRequestDto;
 import com.example.user_info.exception.UserAlreadyExistsException;
-import com.example.user_info.exception.UserNotExist;
+import com.example.user_info.exception.UserNotExistException;
 import com.example.user_info.exception.UserNotSaveException;
 import com.example.user_info.model.User;
-import com.example.user_info.repo.UserRepository;
+import com.example.user_info.repo.UserDao;
 import com.example.user_info.dto.UserResponseDto;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-    private final UserRepository userRepo;
+    private final UserDao userDao;
 
-    public UserService(UserRepository userRepo) {
-        this.userRepo = userRepo;
+    public UserService(UserDao userRepo) {
+        this.userDao = userRepo;
     }
 
     public List<UserResponseDto> getUser() {
-        return userRepo.findAll()
+        return userDao.findAll()
                 .stream()
                 .map(user -> toResponse(user))
                 .collect(Collectors.toList());
@@ -33,7 +33,7 @@ public class UserService {
 
     @Transactional
     public UserResponseDto saveUser(UserRequestDto request) {
-        if (userRepo.existsByEmail(request.getEmail())) {
+        if (userDao.existsByEmail(request.getEmail())) {
             throw new UserAlreadyExistsException("Email already registered");
         }
         String email = request.getEmail().trim().toLowerCase();
@@ -45,7 +45,7 @@ public class UserService {
         user.setDateTime(LocalDateTime.now(ZoneId.of("Asia/Kathmandu")));
 
         try {
-            return toResponse(userRepo.save(user));
+            return toResponse(userDao.save(user));
         } catch (DataAccessException e) {
             throw new UserNotSaveException("Fail to save user", e);
         }
@@ -62,17 +62,17 @@ public class UserService {
     }
 
     public void dropUser(Long id) {
-        if (!userRepo.existsById(id)) {
-            throw new UserNotExist("User is not exist in Database" + id);
+        if (!userDao.existsById(id)) {
+            throw new UserNotExistException("User is not exist in Database" + id);
         }
-        userRepo.deleteById(id);
+        userDao.deleteById(id);
     }
 
 
     @Transactional
     public UserResponseDto updateUser(Long id, UserRequestDto request) {
-        User user = userRepo.findById(id)
-                .orElseThrow(() -> new UserNotExist("User not found with id " + id));
+        User user = userDao.findById(id)
+                .orElseThrow(() -> new UserNotExistException("User not found with id " + id));
 
         if (request.getName() != null && !request.getName().isBlank()) {
             user.setName(request.getName());
@@ -91,7 +91,7 @@ public class UserService {
         }
 
         try {
-            return toResponse(userRepo.saveAndFlush(user));
+            return toResponse(userDao.saveAndFlush(user));
         } catch (DataAccessException e) {
             throw new UserNotSaveException("Fail to update user", e);
         }

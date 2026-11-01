@@ -3,10 +3,10 @@ package com.example.user;
 import com.example.user_info.dto.UserRequestDto;
 import com.example.user_info.dto.UserResponseDto;
 import com.example.user_info.exception.UserAlreadyExistsException;
-import com.example.user_info.exception.UserNotExist;
+import com.example.user_info.exception.UserNotExistException;
 import com.example.user_info.exception.UserNotSaveException;
 import com.example.user_info.model.User;
-import com.example.user_info.repo.UserRepository;
+import com.example.user_info.repo.UserDao;
 import com.example.user_info.sevice.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
     @Mock
-    private UserRepository repo;
+    private UserDao repo;
     @InjectMocks
     private UserService userService;
     private UserRequestDto request;
@@ -129,8 +129,8 @@ class UserServiceTest {
         /*Drop user from mock db (Negative) */
     void drop_userFromDb_ExceptionThrow() {
         when(repo.existsById(1L)).thenReturn(false);
-        UserNotExist userNotExist =
-                assertThrows(UserNotExist.class, () -> userService.dropUser(1L));
+        UserNotExistException userNotExist =
+                assertThrows(UserNotExistException.class, () -> userService.dropUser(1L));
         assertEquals("User is not exist in Database1", userNotExist.getMessage());
         verify(repo, never()).deleteById(any());
     }
@@ -139,8 +139,8 @@ class UserServiceTest {
         /* Update user form mock db (Negative)*/
     void update_userFromDb_ExceptionDrow() {
         when(repo.findById(1L)).thenReturn(Optional.empty());
-        UserNotExist userNotExist =
-                assertThrows(UserNotExist.class, () -> userService.updateUser(1L, request));
+        UserNotExistException userNotExist =
+                assertThrows(UserNotExistException.class, () -> userService.updateUser(1L, request));
         assertEquals("User not found with id 1", userNotExist.getMessage());
         verify(repo, never()).saveAndFlush(any());
 

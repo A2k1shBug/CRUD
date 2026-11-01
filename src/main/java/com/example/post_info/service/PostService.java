@@ -7,9 +7,9 @@ import com.example.post_info.exception.PostNotSave;
 import com.example.post_info.model.Post;
 import com.example.post_info.repo.PostRepo;
 
-import com.example.user_info.exception.UserNotExist;
+import com.example.user_info.exception.UserNotExistException;
 import com.example.user_info.model.User;
-import com.example.user_info.repo.UserRepository;
+import com.example.user_info.repo.UserDao;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 @Service
 public class PostService {
     private final PostRepo postRepo;
-    private final UserRepository userRepository;
+    private final UserDao userRepository;
 
-    public PostService(PostRepo postRepo, UserRepository userRepository) {
+    public PostService(PostRepo postRepo, UserDao userRepository) {
         this.postRepo = postRepo;
         this.userRepository = userRepository;
     }
@@ -49,7 +49,7 @@ public class PostService {
     @Transactional
     public PostResponse createNewPost(PostRequest request,Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotExist(
+                .orElseThrow(() -> new UserNotExistException(
                          "User not found with id: " + userId));
         Post savedPost;
         Post post = new Post();
