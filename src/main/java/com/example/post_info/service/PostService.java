@@ -5,7 +5,7 @@ import com.example.post_info.dto.PostResponse;
 import com.example.post_info.exception.PostNotExist;
 import com.example.post_info.exception.PostNotSave;
 import com.example.post_info.model.Post;
-import com.example.post_info.repo.PostRepo;
+import com.example.post_info.repo.PostDao;
 
 import com.example.user_info.exception.UserNotExistException;
 import com.example.user_info.model.User;
@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 
 @Service
 public class PostService {
-    private final PostRepo postRepo;
-    private final UserDao userRepository;
+    private final PostDao postRepo;
+    private final UserDao userDao;
 
-    public PostService(PostRepo postRepo, UserDao userRepository) {
+    public PostService(PostDao postRepo, UserDao userRepository) {
         this.postRepo = postRepo;
-        this.userRepository = userRepository;
+        this.userDao = userRepository;
     }
     @Transactional(readOnly = true)
     public List<PostResponse> getPost() {
@@ -48,7 +48,7 @@ public class PostService {
 
     @Transactional
     public PostResponse createNewPost(PostRequest request,Long userId) {
-        User user = userRepository.findById(userId)
+        User user = userDao.findById(userId)
                 .orElseThrow(() -> new UserNotExistException(
                          "User not found with id: " + userId));
         Post savedPost;

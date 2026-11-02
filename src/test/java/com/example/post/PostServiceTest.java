@@ -2,7 +2,7 @@ package com.example.post;
 
 import com.example.post_info.dto.PostResponse;
 import com.example.post_info.model.Post;
-import com.example.post_info.repo.PostRepo;
+import com.example.post_info.repo.PostDao;
 import com.example.post_info.service.PostService;
 
 import com.example.user_info.model.User;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class PostServiceTest {
     @Mock
-    private PostRepo postRepo;
+    private PostDao postRepo;
     @InjectMocks
     private PostService postService;
 

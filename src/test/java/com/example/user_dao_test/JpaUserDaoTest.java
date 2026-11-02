@@ -1,4 +1,4 @@
-package com.example.dao_test;
+package com.example.user_dao_test;
 
 
 import com.example.user_info.model.User;
