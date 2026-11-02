@@ -30,7 +30,7 @@ public class PostController {
     @PostMapping("/user/{userId}/create-post")
     public ResponseEntity<ApiResponse<PostResponse>> createPost(@Valid @RequestBody PostRequest request,
                                                                 @PathVariable Long userId) {
-        PostResponse newPostResponse = postService.createNewPost(request,userId);
+        PostResponse newPostResponse = postService.createNewPost(request, userId);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success("User created successfully", newPostResponse));
