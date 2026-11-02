@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,7 +78,7 @@ public class UserService {
         if (request.getName() != null && !request.getName().isBlank()) {
             user.setName(request.getName());
 
-        }else{
+        } else {
             user.setName(user.getName());
         }
         if (request.getPassword() != null && !request.getPassword().isBlank()) {
@@ -96,5 +97,31 @@ public class UserService {
             throw new UserNotSaveException("Fail to update user", e);
         }
     }
+
+    public String suggestUsername(String name) {
+
+        if (!userDao.existsByUserName(name)) {
+            return name;
+        }
+
+        return generateUniqueUsername(name);
+    }
+
+    public String generateUniqueUsername(String name) {
+
+        String newUsername = name;
+
+        while (userDao.existsByUserName(newUsername)) {
+
+            int randomNumber = ThreadLocalRandom.current()
+                    .nextInt(100, 1000);
+
+            newUsername = name + randomNumber;
+        }
+
+        return newUsername;
+
+    }
 }
+
 

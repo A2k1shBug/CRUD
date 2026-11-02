@@ -21,4 +21,6 @@ public interface UserDao {
     User saveAndFlush(User user);
 
     void deleteById(Long id);
+
+    boolean existsByUserName(String userName);
 }
