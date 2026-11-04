@@ -1,7 +1,7 @@
 package com.example.user_dao_test;
 
 
-import com.example.user_info.model.User;
+import com.example.user_info.model.PostUser;
 import com.example.user_info.repo.JpaUserDao;
 import com.example.user_info.repo.UserDao;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @TestPropertySource(properties = {
         "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect"
 })
-class JpaUserDaoTest {
+class JpaPostUserDaoTest {
 
     @Autowired
     private UserDao userDao;
@@ -34,8 +34,8 @@ class JpaUserDaoTest {
     @Autowired
     private TestEntityManager em;
 
-    private User newUser(String email, String phone) {
-        User user = new User();
+    private PostUser newUser(String email, String phone) {
+        PostUser user = new PostUser();
         user.setName("Test User");
         user.setEmail(email);
         user.setPassword("secret123");
@@ -45,14 +45,14 @@ class JpaUserDaoTest {
 
     @Test
     void save_newUser_assignsId() {
-        User saved = userDao.save(newUser("a@mail.com", "9800000001"));
+        PostUser saved = userDao.save(newUser("a@mail.com", "9800000001"));
 
         assertThat(saved.getId()).isNotNull();
     }
 
     @Test
     void findById_existingUser_returnsUser() {
-        User saved = userDao.save(newUser("a@mail.com", "9800000001"));
+        PostUser saved = userDao.save(newUser("a@mail.com", "9800000001"));
         em.flush();
         em.clear(); // cache hatauera DB bata matra padhcha
 
@@ -74,7 +74,7 @@ class JpaUserDaoTest {
         em.flush();
         em.clear();
 
-        List<User> users = userDao.findAll();
+        List<PostUser> users = userDao.findAll();
 
         assertThat(users).hasSize(2);
     }
@@ -90,7 +90,7 @@ class JpaUserDaoTest {
 
     @Test
     void existsById_trueForExistingId_falseOtherwise() {
-        User saved = userDao.save(newUser("a@mail.com", "9800000001"));
+        PostUser saved = userDao.save(newUser("a@mail.com", "9800000001"));
         em.flush();
 
         assertThat(userDao.existsById(saved.getId())).isTrue();
@@ -99,23 +99,23 @@ class JpaUserDaoTest {
 
     @Test
     void save_existingUser_updatesRow() {
-        User saved = userDao.save(newUser("a@mail.com", "9800000001"));
+        PostUser saved = userDao.save(newUser("a@mail.com", "9800000001"));
         em.flush();
         em.clear();
 
-        User toUpdate = userDao.findById(saved.getId()).orElseThrow();
+        PostUser toUpdate = userDao.findById(saved.getId()).orElseThrow();
         toUpdate.setName("Updated Name");
         userDao.save(toUpdate);
         em.flush();
         em.clear();
 
-        User fromDb = em.find(User.class, saved.getId());
+        PostUser fromDb = em.find(PostUser.class, saved.getId());
         assertThat(fromDb.getName()).isEqualTo("Updated Name");
     }
 
     @Test
     void deleteById_removesUser() {
-        User saved = userDao.save(newUser("a@mail.com", "9800000001"));
+        PostUser saved = userDao.save(newUser("a@mail.com", "9800000001"));
         em.flush();
         em.clear();
 

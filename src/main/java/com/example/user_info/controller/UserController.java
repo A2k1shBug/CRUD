@@ -6,14 +6,12 @@ import com.example.user_info.dto.UserResponseDto;
 import com.example.user_info.sevice.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
-@Component
 @RestController
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 
@@ -28,14 +26,7 @@ public class UserController {
                 success("Users fetched successfully", user));
     }
 
-    @PostMapping("/create-newUser")
-    public ResponseEntity<ApiResponse<UserResponseDto>> createUser(
-            @Valid @RequestBody UserRequestDto user) {
-        UserResponseDto responseUser = userService.saveUser(user);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.success("User created successfully", responseUser));
-    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {

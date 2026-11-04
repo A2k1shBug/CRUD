@@ -8,7 +8,7 @@ import com.example.post_info.model.Post;
 import com.example.post_info.repo.PostDao;
 
 import com.example.user_info.exception.UserNotExistException;
-import com.example.user_info.model.User;
+import com.example.user_info.model.PostUser;
 import com.example.user_info.repo.UserDao;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class PostService {
 
     @Transactional
     public PostResponse createNewPost(PostRequest request,Long userId) {
-        User user = userDao.findById(userId)
+        PostUser user = userDao.findById(userId)
                 .orElseThrow(() -> new UserNotExistException(
                          "User not found with id: " + userId));
         Post savedPost;

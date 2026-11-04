@@ -5,7 +5,7 @@ import com.example.post_info.model.Post;
 import com.example.post_info.repo.PostDao;
 import com.example.post_info.service.PostService;
 
-import com.example.user_info.model.User;
+import com.example.user_info.model.PostUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +29,7 @@ class PostServiceTest {
 
     @Test
     void getPost_whenPostsExist_returnsMappedResponses() {
-        User user = new User();
+        PostUser user = new PostUser();
         user.setId(1L);
         user.setName("Ramu");
 

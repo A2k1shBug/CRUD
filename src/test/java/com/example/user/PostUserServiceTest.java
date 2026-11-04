@@ -5,7 +5,7 @@ import com.example.user_info.dto.UserResponseDto;
 import com.example.user_info.exception.UserAlreadyExistsException;
 import com.example.user_info.exception.UserNotExistException;
 import com.example.user_info.exception.UserNotSaveException;
-import com.example.user_info.model.User;
+import com.example.user_info.model.PostUser;
 import com.example.user_info.repo.UserDao;
 import com.example.user_info.sevice.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class PostUserServiceTest {
     @Mock
     private UserDao repo;
     @InjectMocks
@@ -47,7 +47,7 @@ class UserServiceTest {
     @Test
     void saveUser_whenEmailIsNew_returnsSavedUser() {
         when(repo.existsByEmail("aakashchaudhary@gmail.com")).thenReturn(false);
-        when(repo.save(any(User.class))).thenAnswer(inv -> inv.getArgument(0));
+        when(repo.save(any(PostUser.class))).thenAnswer(inv -> inv.getArgument(0));
         UserResponseDto userResponseDto = userService.saveUser(request);
         assertNotNull(userResponseDto);
         assertEquals("aakashchaudhary@gmail.com", userResponseDto.getEmail());
@@ -72,7 +72,7 @@ class UserServiceTest {
     void saveUser_whenEmailHasSpacesAndUpperCase_normalizesEmail() {
         request.setEmail("aakashchaudhary@gmail.com");
         when(repo.existsByEmail(anyString())).thenReturn(false);
-        when(repo.save(any(User.class)))
+        when(repo.save(any(PostUser.class)))
                 .thenAnswer(inv -> inv.getArgument(0));
 
         userService.saveUser(request);
@@ -87,7 +87,7 @@ class UserServiceTest {
         DataAccessException dbError = new DataAccessResourceFailureException("DB down");
 
         when(repo.existsByEmail(anyString())).thenReturn(false);
-        when(repo.save(any(User.class))).thenThrow(dbError);
+        when(repo.save(any(PostUser.class))).thenThrow(dbError);
 
 
         UserNotSaveException ex = assertThrows(UserNotSaveException.class,
@@ -95,16 +95,16 @@ class UserServiceTest {
 
         assertEquals("Fail to save user", ex.getMessage());
         assertSame(dbError, ex.getCause());
-        verify(repo).save(any(User.class));
+        verify(repo).save(any(PostUser.class));
 
     }
 
     @Test
     void getUser_returnsAllUsersAsResponseDtos() {
-        User user1 = new User
+        PostUser user1 = new PostUser
                 (1L, "Ramu", "ramu@gmail.com", "ramu12345", "9766819737",
                         LocalDateTime.now(),new ArrayList<>(),List.of("USER") );
-        User user2 = new User
+        PostUser user2 = new PostUser
                 (2L, "Shyam", "ram@gmail.com", "9800000000", "hashedPwd2",
                         LocalDateTime.now(),new ArrayList<>(),List.of("USER")  );
         when(repo.findAll()).thenReturn(List.of(user1, user2));
@@ -165,12 +165,12 @@ class UserServiceTest {
 
     @Test
     void updateUser_whenNameIsBlank_keepsOldName() {
-        User existing = existingUser();
+        PostUser existing = existingUser();
         UserRequestDto request = new UserRequestDto();
         request.setName("   ");
 
         when(repo.findById(1L)).thenReturn(Optional.of(existing));
-        when(repo.saveAndFlush(any(User.class)))
+        when(repo.saveAndFlush(any(PostUser.class)))
                 .thenAnswer(inv -> inv.getArgument(0));
 
         UserResponseDto response = userService.updateUser(1L, request);
@@ -180,10 +180,10 @@ class UserServiceTest {
 
     @Test
     void updateUser_whenAllFieldsNull_keepsOldValues() {
-        User existing = existingUser();
+        PostUser existing = existingUser();
 
         when(repo.findById(1L)).thenReturn(Optional.of(existing));
-        when(repo.saveAndFlush(any(User.class)))
+        when(repo.saveAndFlush(any(PostUser.class)))
                 .thenAnswer(inv -> inv.getArgument(0));
 
         UserResponseDto response = userService.updateUser(1L, new UserRequestDto());
@@ -195,7 +195,7 @@ class UserServiceTest {
     @Test
     void updateUser_whenAllFieldsProvided_updatesAllFields() {
 
-        User existing = existingUser();
+        PostUser existing = existingUser();
         UserRequestDto request = new UserRequestDto();
         request.setName("New Name");
         request.setEmail("new@gmail.com");
@@ -203,7 +203,7 @@ class UserServiceTest {
         request.setPassword("NewPass@123");
 
         when(repo.findById(1L)).thenReturn(Optional.of(existing));
-        when(repo.saveAndFlush(any(User.class)))
+        when(repo.saveAndFlush(any(PostUser.class)))
                 .thenAnswer(inv -> inv.getArgument(0));
 
 
@@ -214,8 +214,8 @@ class UserServiceTest {
         assertEquals("new@gmail.com", response.getEmail());
     }
 
-    private User existingUser() {
-        User user = new User();
+    private PostUser existingUser() {
+        PostUser user = new PostUser();
         user.setId(1L);
         user.setName("Ramu");
         user.setEmail("ramu@gmail.com");

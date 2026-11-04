@@ -3,7 +3,7 @@ package com.example.post_dao_test;
 import com.example.post_info.model.Post;
 import com.example.post_info.repo.JpaPostDao;
 import com.example.post_info.repo.PostDao;
-import com.example.user_info.model.User;
+import com.example.user_info.model.PostUser;
 import com.example.user_info.repo.JpaUserDao;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,12 +32,12 @@ class JpaPostDaoTest {
     @Autowired
     private TestEntityManager em;
 
-    private User owner;
+    private PostUser owner;
 
     @BeforeEach
     void setUp() {
         // Har test ko lagi ek user (post ko owner)
-        owner = new User();
+        owner = new PostUser();
         owner.setName("Owner");
         owner.setEmail("owner@mail.com");
         owner.setPassword("secret123");
@@ -127,6 +127,6 @@ class JpaPostDaoTest {
 
         assertThat(postDao.findById(saved.getId())).isEmpty();
         // Post delete bhayo, user delete hunu hudaina
-        assertThat(em.find(User.class, owner.getId())).isNotNull();
+        assertThat(em.find(PostUser.class, owner.getId())).isNotNull();
     }
 }

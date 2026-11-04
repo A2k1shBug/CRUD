@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @WebMvcTest(UserController.class)
-class UserControllerTest {
+class PostUserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 

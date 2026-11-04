@@ -1,6 +1,6 @@
 package com.example.post_info.model;
 
-import com.example.user_info.model.User;
+import com.example.user_info.model.PostUser;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -35,5 +35,5 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
-    private User user;
+    private PostUser user;
 }

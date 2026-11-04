@@ -4,10 +4,12 @@ import com.example.user_info.dto.UserRequestDto;
 import com.example.user_info.exception.UserAlreadyExistsException;
 import com.example.user_info.exception.UserNotExistException;
 import com.example.user_info.exception.UserNotSaveException;
-import com.example.user_info.model.User;
+import com.example.user_info.model.PostUser;
 import com.example.user_info.repo.UserDao;
 import com.example.user_info.dto.UserResponseDto;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
     private final UserDao userDao;
-
+    private final static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     public UserService(UserDao userRepo) {
         this.userDao = userRepo;
     }
@@ -38,11 +40,11 @@ public class UserService {
             throw new UserAlreadyExistsException("Email already registered");
         }
         String email = request.getEmail().trim().toLowerCase();
-        User user = new User();
+        PostUser user = new PostUser();
         user.setName(request.getName());
         user.setEmail(email);
         user.setPhoneNumber(request.getPhone());
-        user.setPassword(request.getPassword());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setDateTime(LocalDateTime.now(ZoneId.of("Asia/Kathmandu")));
         user.setRoles(List.of("USER"));
 
@@ -53,7 +55,7 @@ public class UserService {
         }
     }
 
-    private UserResponseDto toResponse(User user) {
+    private UserResponseDto toResponse(PostUser user) {
         UserResponseDto dto = new UserResponseDto();
         dto.setUserId(user.getId());
         dto.setName(user.getName());
@@ -73,7 +75,7 @@ public class UserService {
 
     @Transactional
     public UserResponseDto updateUser(Long id, UserRequestDto request) {
-        User user = userDao.findById(id)
+        PostUser user = userDao.findById(id)
                 .orElseThrow(() -> new UserNotExistException("User not found with id " + id));
 
         if (request.getName() != null && !request.getName().isBlank()) {

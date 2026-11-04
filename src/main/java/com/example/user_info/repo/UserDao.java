@@ -1,6 +1,6 @@
 package com.example.user_info.repo;
 
-import com.example.user_info.model.User;
+import com.example.user_info.model.PostUser;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -8,19 +8,21 @@ import java.util.Optional;
 
 @Repository
 public interface UserDao {
-    List<User> findAll();
+    List<PostUser> findAll();
 
-    Optional<User> findById(Long id);
+    Optional<PostUser> findById(Long id);
 
     boolean existsByEmail(String email);
 
     boolean existsById(Long id);
 
-    User save(User user);
+    PostUser save(PostUser user);
 
-    User saveAndFlush(User user);
+    PostUser saveAndFlush(PostUser user);
 
     void deleteById(Long id);
 
     boolean existsByUserName(String userName);
+
+    PostUser findByName(String username);
 }
