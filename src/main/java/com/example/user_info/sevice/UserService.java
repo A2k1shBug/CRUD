@@ -44,6 +44,7 @@ public class UserService {
         user.setPhoneNumber(request.getPhone());
         user.setPassword(request.getPassword());
         user.setDateTime(LocalDateTime.now(ZoneId.of("Asia/Kathmandu")));
+        user.setRoles(List.of("USER"));
 
         try {
             return toResponse(userDao.save(user));

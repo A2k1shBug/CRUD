@@ -103,10 +103,10 @@ class UserServiceTest {
     void getUser_returnsAllUsersAsResponseDtos() {
         User user1 = new User
                 (1L, "Ramu", "ramu@gmail.com", "ramu12345", "9766819737",
-                        LocalDateTime.now(),new ArrayList<>() );
+                        LocalDateTime.now(),new ArrayList<>(),List.of("USER") );
         User user2 = new User
                 (2L, "Shyam", "ram@gmail.com", "9800000000", "hashedPwd2",
-                        LocalDateTime.now(),new ArrayList<>() );
+                        LocalDateTime.now(),new ArrayList<>(),List.of("USER")  );
         when(repo.findAll()).thenReturn(List.of(user1, user2));
         List<UserResponseDto> user = userService.getUser();
         assertEquals(2, user.size());
